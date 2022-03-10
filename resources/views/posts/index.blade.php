@@ -26,6 +26,7 @@
       <p>{{ $post['body'] }}</p>
     </div>
     @endforeach
+    {{ $posts->links() }}
     @else
     <p>No post</p>
     @endif
