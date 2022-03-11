@@ -24,4 +24,10 @@ class Post extends Model
   {
     return $this->hasMany(Like::class);
   }
+
+  public function likedBy(User $user)
+  {
+    // jika dalam postingan yang di likes ini ada user_id tersebut maka mengembalikan nilai true 
+    return $this->likes->contains('user_id', $user->id);
+  }
 }
