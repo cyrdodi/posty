@@ -30,6 +30,8 @@ class PostController extends Controller
 
   public function destroy(Post $post)
   {
+    // authorize who can delete post,first paramereter is method's name, second is Model 
+    $this->authorize('delete', $post);
     $post->delete();
 
     return back();

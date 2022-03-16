@@ -26,15 +26,13 @@
       <p>{{ $post['body'] }}</p>
 
       {{-- delete --}}
-      @if($post->ownedBy(auth()->user()))
-      <div>
-        <form action="{{ route('posts.destroy', $post->id) }}" method="post">
-          @csrf
-          @method('DELETE')
-          <button type="submit" class="text-red-700 text-sm">Delete</button>
-        </form>
-      </div>
-      @endif
+      @can('delete', $post)
+      <form action="{{ route('posts.destroy', $post->id) }}" method="post">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="text-sm text-red-700">Delete</button>
+      </form>
+      @endcan
 
       <div class="flex items-center">
         {{-- not shown if not login --}}
