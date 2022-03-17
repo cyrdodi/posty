@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Like;
+use App\Models\Post;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -52,5 +53,19 @@ class User extends Authenticatable
   public function likes()
   {
     return $this->hasMany(Like::class);
+  }
+
+  // mendapatkan likes yang diterima user dari seluruh postingan
+  public function receivedLikes()
+  {
+    /* 
+      relationship has many through
+      we use hasManyThrough to get data that has no direct relationship
+      table structure:
+      User -> Post -> Likes
+      user has many post and post has many likes
+      we want to get data how many likes user have from every posts
+     */
+    return $this->hasManyThrough(Like::class, Post::class);
   }
 }
