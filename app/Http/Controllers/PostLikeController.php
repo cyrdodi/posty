@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Mail\PostLiked;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class PostLikeController extends Controller
 {
@@ -20,6 +22,14 @@ class PostLikeController extends Controller
     $post->likes()->create([
       'user_id' => $request->user()->id
     ]);
+
+    /* 
+      we called Mail class in here after create record in database.
+      to($param) is email that sends to,
+      PostLiked($param1, $param2) ,
+      parameter will be used in app/Mail/PostLiked.php/__construct().
+    */
+    Mail::to($post->user)->send(new PostLiked(auth()->user(), $post));
 
     return back();
   }
