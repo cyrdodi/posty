@@ -23,13 +23,19 @@ class PostLikeController extends Controller
       'user_id' => $request->user()->id
     ]);
 
-    /* 
-      we called Mail class in here after create record in database.
-      to($param) is email that sends to,
-      PostLiked($param1, $param2) ,
-      parameter will be used in app/Mail/PostLiked.php/__construct().
-    */
-    Mail::to($post->user)->send(new PostLiked(auth()->user(), $post));
+    /*
+      hitung berapa likes yang sudah di delete dengan user_id == user id yang sedang ngelike,
+      jika ada jangan kirim email, jika tidak ada maka kirimkan email
+     */
+    if (!$post->likes()->onlyTrashed()->where('user_id', $request->user()->id)->count()) {
+      /* 
+        we called Mail class in here after create record in database.
+        to($param) is email that sends to,
+        PostLiked($param1, $param2) ,
+        parameter will be used in app/Mail/PostLiked.php/__construct().
+      */
+      Mail::to($post->user)->send(new PostLiked(auth()->user(), $post));
+    }
 
     return back();
   }
