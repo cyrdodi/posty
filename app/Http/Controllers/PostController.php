@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+  public function __construct()
+  {
+    // set auth only to store and delete method
+    $this->middleware(['auth'])->only(['store', 'delete']);
+  }
   public function index()
   {
     $post = Post::latest()->with(['user', 'likes'])->paginate(20);
